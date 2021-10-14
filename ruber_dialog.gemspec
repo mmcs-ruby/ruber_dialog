@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "TODO: Write a short summary, because RubyGems requires one."
   spec.description   = "TODO: Write a longer description or delete this line."
-  spec.homepage      = "https://github.com/mmcs-ruby/ruber_dialog"
+  spec.homepage      = "https://github.com/Sakorni/ruber_dialog"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 2.4.0"
 
