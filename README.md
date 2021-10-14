@@ -1,4 +1,4 @@
-[![Build](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml/badge.svg)](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml)
+[![Build](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml)
 <a href="https://codeclimate.com/github/Sakorni/ruber_dialog/maintainability"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/maintainability" /></a>
 <a href="https://codeclimate.com/github/Sakorni/ruber_dialog/test_coverage"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/test_coverage" /></a>
 
