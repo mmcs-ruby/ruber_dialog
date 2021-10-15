@@ -1,7 +1,6 @@
-[![Build](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml)
-<a href="https://codeclimate.com/github/Sakorni/ruber_dialog/maintainability"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/maintainability" /></a>
-<a href="https://codeclimate.com/github/Sakorni/ruber_dialog/test_coverage"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/test_coverage" /></a>
-
+[![Build](https://github.com/mmcs-ruby/ruber_dialog/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mmcs-ruby/ruber_dialog/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c81c33ffc189fd5698ac/maintainability)](https://codeclimate.com/github/mmcs-ruby/ruber_dialog/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c81c33ffc189fd5698ac/test_coverage)](https://codeclimate.com/github/mmcs-ruby/ruber_dialog/test_coverage)
 
 # RuberDialog
 

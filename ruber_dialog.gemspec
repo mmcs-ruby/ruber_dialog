@@ -8,11 +8,11 @@ Gem::Specification.new do |spec|
   spec.authors       = ["mmcs-ruby"]
   spec.email         = ["poganesyan@sfedu.ru"]
 
-  spec.summary       = "Gem for building a dialogs."
+  spec.summary       = "Gem for building dialogs."
   spec.description   = "Really long explanation"
-  spec.homepage      = "https://github.com/Sakorni/ruber_dialog"
+  spec.homepage      = "https://github.com/mmcs-ruby/ruber_dialog"
   spec.license       = "MIT"
-  spec.required_ruby_version = ">= 2.4.0"
+  spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 

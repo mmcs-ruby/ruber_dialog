@@ -1,0 +1,30 @@
+PATH
+  remote: .
+  specs:
+    ruber_dialog (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    docile (1.4.0)
+    json (2.5.1)
+    minitest (5.14.4)
+    rake (13.0.6)
+    simplecov (0.17.0)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
+
+PLATFORMS
+  x64-mingw32
+  x86_64-linux
+
+DEPENDENCIES
+  minitest (~> 5.0)
+  rake (~> 13.0)
+  ruber_dialog!
+  simplecov (~> 0.3)
+
+BUNDLED WITH
+   2.2.20
