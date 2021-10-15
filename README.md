@@ -1,3 +1,8 @@
+[![Build](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Sakorni/ruber_dialog/actions/workflows/ci.yml)
+<a href="https://codeclimate.com/github/Sakorni/ruber_dialog/maintainability"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/maintainability" /></a>
+<a href="https://codeclimate.com/github/Sakorni/ruber_dialog/test_coverage"><img src="https://api.codeclimate.com/v1/badges/6d58f15d46aefe941dca/test_coverage" /></a>
+
+
 # RuberDialog
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ruber_dialog`. To experiment with that code, run `bin/console` for an interactive prompt.
