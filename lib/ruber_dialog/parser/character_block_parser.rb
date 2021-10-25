@@ -3,55 +3,63 @@
 require_relative "errors"
 require_relative "tokens"
 require_relative "character_parser"
+require_relative "block_parser"
+
 module RuberDialog
   module Parser
     # class for parsing block of Characters
-    class CharacterBlockParser
+    class CharacterBlockParser < BlockParser
       attr_reader :block_name, :reserved_name, :forbidden_expressions
       attr_accessor :separator
 
-      def initialize(block_name: "Characters:", reserved_name: "Description", forbidden_expressions: %w({ [ ] }))
+      def initialize(starting_line: 1, block_name: "Characters:", reserved_names: ["Description"],
+                     forbidden_expressions: %w({ [ ] }), separator: "\n")
         @block_name = block_name
-        @reserved_name = reserved_name
-        @forbidden_expressions = forbidden_expressions
-        @character_parser = CharacterParser.new(forbidden_expressions: forbidden_expressions,
-                                                reserved_names: [reserved_name, block_name])
-        @lines_offset = 0
-        @separator = "\n"
+        reserved_names = reserved_names.clone
+        reserved_names << block_name
+        character_parser = CharacterParser.new(forbidden_expressions: forbidden_expressions,
+                                               reserved_names: reserved_names)
+        @separator = separator
+        @skipped_lines = block_name.count "\n"
+        super(forbidden_expressions, reserved_names,
+              starting_line: starting_line, token_parser: character_parser)
       end
 
-      def lines_offset=(offset)
-        raise ArgumentError("offset cannot be negative") if offset.negative?
-
-        @lines_offset = offset
+      def lines_offset
+        super + @skipped_lines
       end
 
-      def character_line_number(index)
-        @lines_offset + index + 2
+      # for validation and parsing
+      def split_to_token_contents(characters_content)
+        contents = characters_content[@block_name.length..]&.split @separator
+        separator_line_breaks = @separator.count "\n"
+        token_contents = []
+        contents.each do |content|
+          content_lines = content.count("\n") + separator_line_breaks
+          token_contents << TokenContent.new(content, content_lines)
+        end
+        token_contents
       end
-      private :character_line_number
 
+      # validates characters block, returns hash<line number, ValidationError>
       def validate(characters_string)
         errors = Hash.new { |hash, key| hash[key] = [] }
         unless characters_string.start_with?(@block_name)
-          errors[@lines_offset + 1] = [ValidationError.new(0, "No character block definition")]
+          errors[@starting_line] = [ValidationError.new(0, "No character block definition")]
         end
 
-        char_lines = characters_string[@block_name.length..]&.split @separator
-        char_lines.each_with_index do |line, i|
-          line_errors = @character_parser.validate(line)
-          errors[character_line_number(i)].push(*line_errors)
-        end
-        errors
+        super_errors = super(characters_string)
+        errors.merge(super_errors) { |key, old_val, new_val| old_val.push(*new_val) }
       end
 
+      # parses characters block, returns list of Character
       def parse(characters_string)
         unless characters_string.start_with?(@block_name)
-          raise ParsingError.new(@lines_offset + 1, "No character block definition")
+          raise ParsingError.new(@starting_line, "No character block definition")
         end
 
-        char_lines = characters_string[@block_name.length..]&.split @separator
-        char_lines&.map { |char_line| @character_parser.parse(char_line) }
+        char_lines = split_to_token_contents characters_string
+        char_lines&.map { |char_content| @token_parser.parse(char_content.content) }
       end
     end
   end

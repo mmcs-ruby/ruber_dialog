@@ -9,10 +9,18 @@ module RuberDialog
     # Single Character parser from string
     class CharacterParser < TokenParser
       def initialize(forbidden_expressions: [], reserved_names: [])
-        setup_forbidden_expression_error { |fe| "Forbidden symbol '#{fe}'" }
-        setup_reserved_name_error { |rn| "Use of reserved name (#{rn}) as a character name is forbidden" }
         super(forbidden_expressions, reserved_names)
       end
+
+      def forbidden_expression_error(expression)
+        "Forbidden symbol '#{expression}'"
+      end
+
+      def reserved_name_error(name)
+        "Use of reserved name (#{name}) as a character name is forbidden"
+      end
+
+      protected :forbidden_expression_error, :reserved_name_error
 
       def parse(content)
         raise ArgumentError unless content.is_a?(String)
