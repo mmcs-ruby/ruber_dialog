@@ -17,7 +17,7 @@ class ParserTest < Minitest::Test
     assert_respond_to validation_error, :error
     assert_respond_to validation_error, :position
     assert_respond_to validation_error, :to_s
-    assert_equal "#At (0): 'Error'", validation_error.to_s
+    assert_equal "#Line 1: at (0) 'Error'", validation_error.to_s
     assert_equal ValidationError.new(0, "Error"), validation_error
   end
 end

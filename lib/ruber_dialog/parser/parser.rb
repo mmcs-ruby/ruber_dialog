@@ -14,52 +14,60 @@ module RuberDialog
         @reserved_names = reserved_names
       end
 
-      # takes block to create error message, puts forbidden expression inside
-      def validate_forbidden_expressions(content, &block)
+      # for setting up error messages
+
+      def reserved_name_error(name)
+        raise NotImplementedError("reserved_name_error must be implemented for validation")
+      end
+
+      def forbidden_expression_error(expression)
+        raise NotImplementedError("forbidden_expression_error must be implemented for validation")
+      end
+
+      protected :reserved_name_error, :forbidden_expression_error
+
+      # searches for forbidden expressions in a line, returns ValidationError
+      def validate_forbidden_expressions(content, local_line)
         errors = []
 
         @forbidden_expressions.each do |expression|
           if content&.include?(expression)
-            errors << ValidationError.new(content.index(expression), block.call(expression))
+            errors << ValidationError.new(content.index(expression), forbidden_expression_error(expression), local_line)
           end
         end
         errors
       end
 
-      # takes block to create error message, puts reserved name inside
-      def validate_reserved_names(content, &block)
+      # searches for reserved names in a line, returns ValidationError
+      def validate_reserved_names(content, local_line)
         errors = []
 
         @reserved_names.each do |reserved_name|
           # start_with? because reserved name should be found without any splitting
-          errors << ValidationError.new(0, block.call(reserved_name)) if content&.start_with?(reserved_name)
+          if content&.start_with?(reserved_name)
+            errors << ValidationError.new(0, reserved_name_error(reserved_name), local_line)
+          end
         end
         errors
       end
 
       protected :validate_forbidden_expressions, :validate_reserved_names
 
-      # for setting up error messages in inheritors
-
-      def setup_reserved_name_error(&block)
-        @reserved_name_error = block
-      end
-
-      def setup_forbidden_expression_error(&block)
-        @forbidden_expression_error = block
-      end
-
-      protected :setup_forbidden_expression_error, :setup_reserved_name_error
-
+      # splits content to lines, validate each line and put errors together
       def validate(content)
-        errors = validate_forbidden_expressions(content) { |expr| @forbidden_expression_error.call(expr) }
-        errors_reserved_names = validate_reserved_names(content) { |name| @reserved_name_error.call(name) }
-        errors.push(*errors_reserved_names)
-        errors.sort_by(&:position)
+        errors = []
+        lines = content.split "\n"
+        lines.each_with_index do |line, index|
+          errors_forbidden = validate_forbidden_expressions(line, index + 1)
+          errors_reserved_names = validate_reserved_names(line, index + 1)
+          errors.push(*errors_forbidden)
+          errors.push(*errors_reserved_names)
+        end
+        errors.sort_by { |err| [err.local_line, err.position] }
       end
 
       def parse(content)
-        raise NotImplementedError("You have to implement parse for a TokenParser inheritor")
+        raise NotImplementedError("parse must be implemented for a TokenParser inheritor")
       end
     end
   end
