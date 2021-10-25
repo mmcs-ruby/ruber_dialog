@@ -5,8 +5,8 @@ require "test_helper"
 class CharacterBlockParserTest < Minitest::Test
   include RuberDialog::Parser
 
-  def val_err(pos, err, line)
-    ValidationError.new(pos, err, line)
+  def val_err(err, line)
+    ValidationError.new(err, line)
   end
 
   def test_character_block_parser_has_methods
@@ -49,13 +49,13 @@ class CharacterBlockParserTest < Minitest::Test
     character_block_parser = CharacterBlockParser.new(block_name: "Chars:\n", forbidden_expressions: %w({ [ ] }))
     errors = character_block_parser.validate("Chars:\nFrodo}\n")
     assert_empty errors[1]
-    assert_equal [val_err(5, "Forbidden symbol '}'", 2)], errors[2]
+    assert_equal [val_err("Forbidden symbol '}'", 2)], errors[2]
     errors = character_block_parser.validate("Chars:\n{Frodo\nGan]da[lf}\n[Me\nNormal Name")
     assert_empty errors[1]
-    assert_equal [val_err(0, "Forbidden symbol '{'", 2)], errors[2]
-    assert_equal [val_err(3, "Forbidden symbol ']'", 3), val_err(6, "Forbidden symbol '['", 3),
-                  val_err(9, "Forbidden symbol '}'", 3)], errors[3]
-    assert_equal [val_err(0, "Forbidden symbol '['", 4)], errors[4]
+    assert_equal [val_err("Forbidden symbol '{'", 2)], errors[2]
+    assert_equal [val_err("Forbidden symbol ']'", 3), val_err("Forbidden symbol '['", 3),
+                  val_err("Forbidden symbol '}'", 3)], errors[3]
+    assert_equal [val_err("Forbidden symbol '['", 4)], errors[4]
     assert_empty errors[5]
   end
 
@@ -63,18 +63,38 @@ class CharacterBlockParserTest < Minitest::Test
     character_parser = CharacterBlockParser.new(block_name: "Chars:", reserved_names: ["Desc"])
     errors = character_parser.validate("Chars:Gandalf\nChars:\n")
     assert_empty errors[1]
-    assert_equal [val_err(0, "Use of reserved name (Chars:) as a character name is forbidden", 2)], errors[2]
+    assert_equal [val_err("Use of reserved name (Chars:) as a character name is forbidden", 2)], errors[2]
 
     errors = character_parser.validate("Chars:Gandalf\nDesc")
     assert_empty errors[1]
-    assert_equal [val_err(0, "Use of reserved name (Desc) as a character name is forbidden", 2)], errors[2]
+    assert_equal [val_err("Use of reserved name (Desc) as a character name is forbidden", 2)], errors[2]
   end
 
   def test_character_block_parser_throws_error
-    character_parser = CharacterBlockParser.new(block_name: "Персонажи:")
+    character_parser = CharacterBlockParser.new(block_name: "Chars:")
     assert_raises(ParsingError) do |err|
-      character_parser.parse("\nГендальф\nОписание")
+      character_parser.parse("\nGandalf\nDescription")
       assert_equal "1: No character block definition", err.to_s
     end
+  end
+
+  def test_character_block_parser_works_with_different_separators
+    characters_block_parser = CharacterBlockParser.new(forbidden_expressions: %w({ [ ] }),
+                                                       starting_line: 20, separator: ";")
+    errors = characters_block_parser.validate("Characters:Gan{dalf;\n{Frodo\nBag}gins;Bi{lbo;Desc}ription\n")
+    assert_equal [val_err("Forbidden symbol '{'", 20)], errors[20]
+    assert_equal [val_err("Forbidden symbol '{'", 21)], errors[21]
+    assert_equal [val_err("Forbidden symbol '}'", 22),
+                  val_err("Forbidden symbol '{'", 22),
+                  val_err("Forbidden symbol '}'", 22)], errors[22]
+    characters_block_parser.separator = "\n[sep]\n"
+    characters_block_parser.starting_line = 10
+    errors = characters_block_parser.validate("Characters:Gan{dalf\n[sep]\nFro}do\nBaggi[ns\n[sep]\nDescription")
+    assert_equal [val_err("Forbidden symbol '{'", 10)], errors[10]
+    assert_empty errors[11]
+    assert_equal [val_err("Forbidden symbol '}'", 12)], errors[12]
+    assert_equal [val_err("Forbidden symbol '['", 13)], errors[13]
+    assert_empty errors[14]
+    assert_equal [val_err("Use of reserved name (Description) as a character name is forbidden", 15)], errors[15]
   end
 end

@@ -26,14 +26,35 @@ module RuberDialog
 
       protected :reserved_name_error, :forbidden_expression_error
 
+      # data class for ordering validation errors
+      class ValidationErrorServiceData
+        attr_reader :position, :line, :error_msg, :validation_error
+
+        def initialize(validation_error, position = 0)
+          @position = position
+          @line = validation_error.local_line
+          @error_msg = validation_error.error
+          @validation_error = validation_error
+        end
+
+        def <=>(other)
+          return -1 if @line < other.line || @position < other.position
+          return 0 if @line == other.line && @position == other.position && @error_msg == other.error_msg
+
+          1
+        end
+      end
+
       # searches for forbidden expressions in a line, returns ValidationError
       def validate_forbidden_expressions(content, local_line)
         errors = []
 
         @forbidden_expressions.each do |expression|
-          if content&.include?(expression)
-            errors << ValidationError.new(content.index(expression), forbidden_expression_error(expression), local_line)
-          end
+          next unless content&.include?(expression)
+
+          local_position = content.index expression
+          validation_error = ValidationError.new(forbidden_expression_error(expression), local_line)
+          errors << ValidationErrorServiceData.new(validation_error, local_position)
         end
         errors
       end
@@ -44,9 +65,10 @@ module RuberDialog
 
         @reserved_names.each do |reserved_name|
           # start_with? because reserved name should be found without any splitting
-          if content&.start_with?(reserved_name)
-            errors << ValidationError.new(0, reserved_name_error(reserved_name), local_line)
-          end
+          next unless content&.start_with?(reserved_name)
+
+          validation_error = ValidationError.new(reserved_name_error(reserved_name), local_line)
+          errors << ValidationErrorServiceData.new(validation_error, 0)
         end
         errors
       end
@@ -63,7 +85,7 @@ module RuberDialog
           errors.push(*errors_forbidden)
           errors.push(*errors_reserved_names)
         end
-        errors.sort_by { |err| [err.local_line, err.position] }
+        errors.sort.map(&:validation_error)
       end
 
       def parse(content)

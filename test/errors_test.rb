@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ParserTest < Minitest::Test
+class ErrorsTest < Minitest::Test
   include RuberDialog::Parser
 
   def test_parsing_error_methods
@@ -13,11 +13,11 @@ class ParserTest < Minitest::Test
   end
 
   def test_validation_error_methods
-    validation_error = ValidationError.new(0, "Error")
+    validation_error = ValidationError.new("Error", 1)
     assert_respond_to validation_error, :error
-    assert_respond_to validation_error, :position
+    assert_respond_to validation_error, :local_line
     assert_respond_to validation_error, :to_s
-    assert_equal "#Line 1: at (0) 'Error'", validation_error.to_s
-    assert_equal ValidationError.new(0, "Error"), validation_error
+    assert_equal "#At line 1: 'Error'", validation_error.to_s
+    assert_equal ValidationError.new("Error", 1), validation_error
   end
 end

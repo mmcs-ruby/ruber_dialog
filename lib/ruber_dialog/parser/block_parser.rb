@@ -27,7 +27,7 @@ module RuberDialog
       end
 
       def starting_line=(starting_line)
-        raise ArgumentError("starting line cannot be negative") if offset.negative?
+        raise ArgumentError("starting line cannot be negative") if starting_line.negative?
 
         @starting_line = starting_line
       end

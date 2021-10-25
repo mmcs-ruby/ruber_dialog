@@ -20,23 +20,23 @@ module RuberDialog
 
     # low level validation error, contains info about all errors during content validation
     class ValidationError
-      attr_reader :position, :error
+      attr_reader :__position, :error
       attr_accessor :local_line
 
-      def initialize(position, error, local_line = 1)
-        raise ArgumentError, "Error position cannot be negative" if position.negative?
+      def initialize(error, local_line = 1)
+        raise ArgumentError, "Error line cannot be negative" if local_line.negative?
 
-        @position = position
         @error = error
         @local_line = local_line
       end
 
       def to_s
-        "#Line #{@local_line}: at (#{@position}) '#{@error}'"
+        "#At line #{@local_line}: '#{@error}'"
       end
 
+      # __position is not important
       def ==(other)
-        @position == other.position && @error == other.error && @local_line == other.local_line
+        @error == other.error && @local_line == other.local_line
       end
     end
   end
