@@ -20,11 +20,12 @@ module RuberDialog
         character_parser = CharacterParser.new(forbidden_expressions: forbidden_expressions,
                                                reserved_names: reserved_names)
         @separator = separator
-        @skipped_lines = block_name.count "\n"
+        @skipped_lines = block_name.count "\n" # number of lines to be skipped before first character info
         super(forbidden_expressions, reserved_names,
               starting_line: starting_line, token_parser: character_parser)
       end
 
+      # overrides lines_offset in BlockParser
       def lines_offset
         super + @skipped_lines
       end

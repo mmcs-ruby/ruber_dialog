@@ -3,7 +3,7 @@
 module RuberDialog
   # module for character block parsing
   module Parser
-    # basic class for parsing errors in dialog files, contains info about line number
+    # basic class for errors during parsing in dialog files, contains info about line number
     class ParsingError < StandardError
       attr_reader :line
 
@@ -18,7 +18,7 @@ module RuberDialog
       end
     end
 
-    # low level validation error, contains info about all errors during content validation
+    # low level validation error, contains error message and number of line where the error was found during validation
     class ValidationError
       attr_reader :__position, :error
       attr_accessor :local_line

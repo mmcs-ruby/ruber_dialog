@@ -27,6 +27,7 @@ module RuberDialog
       protected :reserved_name_error, :forbidden_expression_error
 
       # data class for ordering validation errors
+      # not supposed to be used somewhere else
       class ValidationErrorServiceData
         attr_reader :position, :line, :error_msg, :validation_error
 
@@ -76,6 +77,7 @@ module RuberDialog
       protected :validate_forbidden_expressions, :validate_reserved_names
 
       # splits content to lines, validate each line and put errors together
+      # returns Array of ValidationError
       def validate(content)
         errors = []
         lines = content.split "\n"
