@@ -46,11 +46,11 @@ module RuberDialog
       def validate(characters_string)
         errors = Hash.new { |hash, key| hash[key] = [] }
         unless characters_string.start_with?(@block_name)
-          errors[@starting_line] = [ValidationError.new(0, "No character block definition")]
+          errors[@starting_line] = [ValidationError.new("No character block definition", @starting_line)]
         end
 
         super_errors = super(characters_string)
-        errors.merge(super_errors) { |key, old_val, new_val| old_val.push(*new_val) }
+        errors.merge(super_errors) { |_key, old_val, new_val| old_val.push(*new_val) }
       end
 
       # parses characters block, returns list of Character
