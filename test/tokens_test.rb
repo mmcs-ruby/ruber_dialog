@@ -18,6 +18,5 @@ class TokensTest < Minitest::Test
   def test_character_has_eq_operator
     character = Character.new("Gandalf")
     assert_equal character, Character.new("Gandalf")
-    assert character == Character.new("Gandalf")
   end
 end

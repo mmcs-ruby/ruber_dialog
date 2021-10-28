@@ -10,12 +10,6 @@ class CharacterParserTest < Minitest::Test
     ValidationError.new(err, line)
   end
 
-  def test_character_parser_has_methods
-    character_parser = CharacterParser.new
-    assert_respond_to character_parser, :parse
-    assert_respond_to character_parser, :validate
-  end
-
   def test_character_parser_validation_reserved_names
     character_parser = CharacterParser.new(reserved_names: %w[Characters: Description])
     assert_equal [val_err("Use of reserved name (Characters:) as a character name is forbidden")],
@@ -24,17 +18,72 @@ class CharacterParserTest < Minitest::Test
                  character_parser.validate("Description")
   end
 
-  def test_character_parser_validation_forbidden_expressions
+  def test_character_parser_validation_starting_with_reserved_names
+    character_parser = CharacterParser.new(reserved_names: %w[Characters: Description])
+    assert_equal [val_err("Use of reserved name (Characters:) as a character name is forbidden")],
+                 character_parser.validate("Characters:Character1")
+  end
+
+  def test_character_parser_validates_one_forbidden_expression_in_middle
     character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
     assert_equal [val_err("Forbidden symbol '{'")], character_parser.validate("Gand{alf")
-    assert_equal [val_err("Forbidden symbol '}'"), val_err("Forbidden symbol '['")],
-                 character_parser.validate("F}[rodo")
+    assert_equal [val_err("Forbidden symbol '['")], character_parser.validate("Gan[dalf")
+    assert_equal [val_err("Forbidden symbol ']'")], character_parser.validate("Ganda]lf")
+    assert_equal [val_err("Forbidden symbol '}'")], character_parser.validate("Gand}alf")
+  end
+
+  def test_character_parser_validates_one_forbidden_expression_in_left
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '{'")], character_parser.validate("{Gandalf")
+    assert_equal [val_err("Forbidden symbol '}'")], character_parser.validate("}Gandalf")
+    assert_equal [val_err("Forbidden symbol '['")], character_parser.validate("[Gandalf")
+    assert_equal [val_err("Forbidden symbol ']'")], character_parser.validate("]Gandalf")
+  end
+
+  def test_character_parser_validates_one_forbidden_expression_in_right
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '{'")], character_parser.validate("Gandalf{")
+    assert_equal [val_err("Forbidden symbol '}'")], character_parser.validate("Gandalf}")
+    assert_equal [val_err("Forbidden symbol '['")], character_parser.validate("Gandalf[")
+    assert_equal [val_err("Forbidden symbol ']'")], character_parser.validate("Gandalf]")
+  end
+
+  def test_character_parser_validates_multiple_forbidden_expressions_middle
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '}'"), val_err("Forbidden symbol '['"),
+                  val_err("Forbidden symbol ']'")],
+                 character_parser.validate("F}[ro]do")
+  end
+
+  def test_character_parser_validates_multiple_forbidden_expression_around
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
     assert_equal [val_err("Forbidden symbol ']'"), val_err("Forbidden symbol '{'")],
                  character_parser.validate("]name{")
-    assert_equal [val_err("Forbidden symbol '}'")], character_parser.validate("Gandalf}")
-    assert_equal [val_err("Forbidden symbol '{'")], character_parser.validate("{Gandalf")
+  end
+
+  def test_character_parser_validates_multiple_forbidden_expressions_left_middle
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '{'"), val_err("Forbidden symbol '}'"), val_err("Forbidden symbol '['")],
+                 character_parser.validate("{Ga}nd[alf")
+  end
+
+  def test_character_parser_validates_multiple_forbidden_expressions_right_middle
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
     assert_equal [val_err("Forbidden symbol '['"), val_err("Forbidden symbol ']'")],
-                 character_parser.validate("[Gandalf]")
+                 character_parser.validate("Ga[ndalf]")
+  end
+
+  def test_character_parser_validates_multiple_forbidden_expressions_mixed
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '{'"), val_err("Forbidden symbol '['"), val_err("Forbidden symbol '}'"),
+                  val_err("Forbidden symbol ']'")],
+                 character_parser.validate("{Ga[nda}lf]")
+  end
+
+  def test_character_parser_validates_repetitive_error_once
+    character_parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }))
+    assert_equal [val_err("Forbidden symbol '['")],
+                 character_parser.validate("Ga[nd[[al[f")
   end
 
   def test_character_parser_validates_many_lines
@@ -44,11 +93,15 @@ class CharacterParserTest < Minitest::Test
                  character_parser.validate("Fr{o}do\nBagg[i]ns")
   end
 
-  def test_character_parser_parses
+  def test_character_parser_parses_character
     character_parser = CharacterParser.new
     character = character_parser.parse("Gandalf")
-    refute_nil character
     assert_instance_of Character, character
-    assert_equal "Gandalf", character.name
+  end
+
+  def test_character_parser_parser_parses
+    character_parser = CharacterParser.new
+    character = character_parser.parse("Gandalf")
+    assert_equal Character.new("Gandalf"), character
   end
 end
