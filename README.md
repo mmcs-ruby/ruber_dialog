@@ -40,7 +40,7 @@ In our language, parsing consists of 3 *blocks*:
     Bilbo
 #### Description block
     {Greeting}
-    Description: There are ale, beer, : and 
+    Description: There are items: ale, beer and 
         line breaks
     Gandalf: Frodo, take the ring!
 #### Responses block

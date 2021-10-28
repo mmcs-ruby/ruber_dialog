@@ -8,6 +8,8 @@ module RuberDialog
   module Parser
     # Single Character parser from string
     class CharacterParser < TokenParser
+      include Parser::Tokens
+
       def initialize(forbidden_expressions: [], reserved_names: [])
         super(forbidden_expressions, reserved_names)
       end
@@ -23,7 +25,7 @@ module RuberDialog
       protected :forbidden_expression_error, :reserved_name_error
 
       def parse(content)
-        raise ArgumentError unless content.is_a?(String)
+        raise RuberArgumentError unless content.is_a?(String)
 
         Character.new(content)
       end

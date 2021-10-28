@@ -28,7 +28,7 @@ module RuberDialog
 
       # specifies line number where the block starts
       def starting_line=(starting_line)
-        raise ArgumentError("starting line cannot be negative") if starting_line.negative?
+        raise RuberArgumentError("starting line cannot be negative") if starting_line.negative?
 
         @starting_line = starting_line
       end

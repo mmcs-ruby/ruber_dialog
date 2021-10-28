@@ -20,11 +20,11 @@ module RuberDialog
 
     # low level validation error, contains error message and number of line where the error was found during validation
     class ValidationError
-      attr_reader :__position, :error
+      attr_reader :error
       attr_accessor :local_line
 
       def initialize(error, local_line = 1)
-        raise ArgumentError, "Error line cannot be negative" if local_line.negative?
+        raise RuberArgumentError, "Error line cannot be negative" if local_line.negative?
 
         @error = error
         @local_line = local_line

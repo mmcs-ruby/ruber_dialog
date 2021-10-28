@@ -3,7 +3,8 @@
 require "test_helper"
 
 class TokensTest < Minitest::Test
-  include RuberDialog::Parser
+  include RuberDialog::Parser::Tokens
+
   def test_character_token_attributes
     character = Character.new("Gandalf")
     assert_equal "Gandalf", character.name

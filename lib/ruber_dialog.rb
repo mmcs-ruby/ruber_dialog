@@ -7,6 +7,6 @@ require_relative "ruber_dialog/parser/character_block_parser"
 require_relative "ruber_dialog/parser/block_parser"
 
 module RuberDialog
-  class Error < StandardError; end
+  class RuberArgumentError < ArgumentError; end
   # Your code goes here...
 end

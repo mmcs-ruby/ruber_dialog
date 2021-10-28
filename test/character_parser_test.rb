@@ -4,6 +4,7 @@ require "test_helper"
 
 class CharacterParserTest < Minitest::Test
   include RuberDialog::Parser
+  include RuberDialog::Parser::Tokens
 
   def val_err(err, line = 1)
     ValidationError.new(err, line)
