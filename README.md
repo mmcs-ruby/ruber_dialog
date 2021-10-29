@@ -47,8 +47,31 @@ In our language, parsing consists of 3 *blocks*:
     [Yes, I will take it -> {To Mordor} | No, I won't take it -> {End}
 
 ### Parsing
-#### Character Block parsing
-**Parser::CharacterBlockParser** (`lib/ruber_dialog/parser/chaeacrer_block_parser.rb`) is main class for parsing characters. 
+#### Character parsing
+
+**Parser::CharacterParser** (`lib/ruber_dialog/parser/character_parser.rb`) is a class for parsing single character string.
+
+Usage:
+
+    s = "Gandalf"
+    parser = CharacterParser.new(forbidden_expressions: %w({ [ ] }), reserved_names: ["Description"]
+    character = parser.parse(s) # => Character("Gandalf")
+    errors = parser.validate(s) # => list of errors, [] in the example
+
+Methods:
+
+    def initiate(forbidden_expressions: [], reserved_names: []) 
+        
+        forbidden_expressions - [String/RegExpr], expressions that are not supposed to be inside character name
+        reserved_names - [String], reserved names such as "Description"
+ 
+    def parse(content) - takes a string and returns Parser::Character
+
+    def validate(content) - takes a string and returns [ValidationError]
+
+#### Character block parsing
+
+**Parser::CharacterBlockParser** (`lib/ruber_dialog/parser/character_block_parser.rb`) is main class for parsing characters. 
 
 Usage:
 
@@ -71,7 +94,7 @@ Methods:
     
     def parse(content) - takes a string and returns array of Parser::Character
 
-    def validate(content) - takes a string and returns Hash with Integer keysand [ValidationError] values
+    def validate(content) - takes a string and returns Hash with Integer keys and [ValidationError] values
 
     def split_to_token_contents(character_content) - takes string, splits it to TokenContents
 

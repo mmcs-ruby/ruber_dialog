@@ -10,6 +10,8 @@ module RuberDialog
     class CharacterParser < TokenParser
       include Parser::Tokens
 
+      # @param forbidden_expressions [String/RegExpr], expressions that are not supposed to be inside character name
+      # @param reserved_names [String], reserved names such as "Description"
       def initialize(forbidden_expressions: [], reserved_names: [])
         super(forbidden_expressions, reserved_names)
       end
@@ -24,6 +26,7 @@ module RuberDialog
 
       protected :forbidden_expression_error, :reserved_name_error
 
+      # parses string into Character
       def parse(content)
         raise RuberArgumentError unless content.is_a?(String)
 
