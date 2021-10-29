@@ -12,6 +12,11 @@ module RuberDialog
       attr_reader :block_name, :reserved_name, :forbidden_expressions
       attr_accessor :separator
 
+      # @param starting_line Integer, line number where the blocks starts.
+      # @param block_name String, key word that helps to determine where the block starts
+      # @param reserved_names [String], reserved names such as "Description"
+      # @param forbidden_expressions [String/RegExpr], expressions that are not supposed to be inside character name
+      # @param separator String/RegExpr, used to separate characters
       def initialize(starting_line: 1, block_name: "Characters:", reserved_names: ["Description"],
                      forbidden_expressions: %w({ [ ] }), separator: "\n")
         @block_name = block_name

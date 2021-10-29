@@ -73,6 +73,9 @@ Methods:
 
     def validate(content) - takes a string and returns Hash with Integer keysand [ValidationError] values
 
+    def split_to_token_contents(character_content) - takes string, splits it to TokenContents
+
+    def starting_line=(starting_line) - for setting up the line where block starts, used for error messages
 
 #### Abstractions
 It is recommended to use **Parser::TokenParser** (`lib/ruber_dialog/parser/parser.rb`) for parsing simple objects in strings, such as a character in **Character Block** or a response in **Response Block**.
