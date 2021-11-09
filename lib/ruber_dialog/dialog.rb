@@ -12,10 +12,10 @@ module RuberDialog
 
       def as_json(options = {})
         {
-          starting_node: starting_node.to_json,
-          nodes: nodes,
-          characters: characters,
-          final_nodes_names: final_nodes_names
+          starting_node: @starting_node,
+          nodes: @nodes,
+          characters: @characters,
+          final_nodes_names: @final_nodes_names
         }
       end
 
