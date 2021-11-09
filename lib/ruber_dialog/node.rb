@@ -13,9 +13,7 @@ module RuberDialog
       def as_json(options = {})
         {
           name: @name,
-          lines: @lines.each do |line|
-            line.to_json
-          end,
+          lines: @lines,
           responses: @responses
         }
       end

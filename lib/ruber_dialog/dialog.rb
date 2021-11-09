@@ -4,19 +4,18 @@ module RuberDialog
   module DialogParts
     #
     class Dialog
-      attr_accessor :starting_node, :nodes, :characters
+      attr_accessor :starting_node, :nodes, :characters, :final_nodes_names
 
-      def initialize(starting_node, nodes, characters)
-        @starting_node, @nodes, @characters = starting_node, nodes, characters
+      def initialize(starting_node, nodes, characters, final_nodes_names)
+        @starting_node, @nodes, @characters, @final_nodes_names = starting_node, nodes, characters, final_nodes_names
       end
 
       def as_json(options = {})
         {
           starting_node: starting_node.to_json,
-          nodes: nodes.each do |node|
-            node.to_json
-          end,
-          characters: characters
+          nodes: nodes,
+          characters: characters,
+          final_nodes_names: final_nodes_names
         }
       end
 

@@ -6,6 +6,12 @@ class ExportToJsonTest < Minitest::Test
   include RuberDialog::Parser::Tokens
   include RuberDialog::DialogParts
 
+  def test_character_to_json
+    character = Character.new("Vincenzo")
+    json = {name: "Vincenzo"}.to_json
+    assert_equal json, character.to_json
+  end
+
   def test_line_to_json
     line = Line.new("Vincenzo", "Are you hungry?")
     json = {char_name: "Vincenzo", phrase: "Are you hungry?"}.to_json
