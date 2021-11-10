@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ## Usage
 
-###Blocks
+### Blocks
 In our language, parsing consists of 3 *blocks*:
 #### Character block:
     Characters:
@@ -135,7 +135,7 @@ This class now is capable of:
 For parsing **blocks**, there is an abstract class **Parser::BlockParser** (`lib/ruber_dialog_parser/block_parser.rb`), which is capable of validating content using encapsulated **Parser::TokenParser** inheritor repetitive   
 To use **BlockParser**, you have to implement **def** *split_to_token_contents(content)*, which is used to extract simple object strings that *TokenParser* could parse them
 
-###Nodes and dialogs
+### Nodes and dialogs
 There are two classes of RuberDialog::DialogParts module.
 
 **Node** is a class containing NPC conversation and possibly the main character's responses (forks).
@@ -147,7 +147,7 @@ Every node has its name, list of NPC's lines, also they can have a list of the m
 Every dialog consists of a starting node, a list of other nodes, a list of characters, and final nodes' names.
 
 
-###Export to JSON
+### Export to JSON
 
 There is a list of classes having **.to_json** method that converts the object to JSON:
 - Character
@@ -156,7 +156,7 @@ There is a list of classes having **.to_json** method that converts the object t
 - Node
 - Dialog
 
-####Examples of JSONs
+#### Examples of JSONs
 
 ```ruby
 # Character
