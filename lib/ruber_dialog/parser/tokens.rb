@@ -25,9 +25,11 @@ module RuberDialog
 
         def as_json(options = {})
           {
-            name: name
+            name: @name
           }
         end
+
+        private :as_json
 
         def to_json(*options)
           as_json(*options).to_json(*options)
@@ -43,10 +45,12 @@ module RuberDialog
 
         def as_json(options = {})
           {
-            char_name: char_name,
-            phrase: phrase
+            char_name: @char_name,
+            phrase: @phrase
           }
         end
+
+        private :as_json
 
         def to_json(*options)
           as_json(*options).to_json(*options)
@@ -62,10 +66,12 @@ module RuberDialog
 
         def as_json(options = {})
           {
-            response: response,
-            next_node: next_node
+            response: @response,
+            next_node: @next_node
           }
         end
+
+        private :as_json
 
         def to_json(*options)
           as_json(*options).to_json(*options)
