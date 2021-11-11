@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ## Usage
 
-###Blocks
+### Blocks
 In our language, parsing consists of 3 *blocks*:
 #### Character block:
     Characters:
@@ -134,6 +134,47 @@ This class now is capable of:
 
 For parsing **blocks**, there is an abstract class **Parser::BlockParser** (`lib/ruber_dialog_parser/block_parser.rb`), which is capable of validating content using encapsulated **Parser::TokenParser** inheritor repetitive   
 To use **BlockParser**, you have to implement **def** *split_to_token_contents(content)*, which is used to extract simple object strings that *TokenParser* could parse them
+
+### Nodes and dialogs
+There are two classes of RuberDialog::DialogParts module.
+
+**Node** is a class containing NPC conversation and possibly the main character's responses (forks).
+You can go to the next node if you have at least one response. Otherwise, it is considered that the node is final.
+Every node has its name, list of NPC's lines, also they can have a list of the main characters' responses.
+
+
+**Dialog** is not a dialogue. It is a class of all possible conversation forks in the game.
+Every dialog consists of a starting node, a list of other nodes, a list of characters, and final nodes' names.
+
+
+### Export to JSON
+
+There is a list of classes having **.to_json** method that converts the object to JSON:
+- Character
+- Line
+- Response
+- Node
+- Dialog
+
+#### Examples of JSONs
+
+```ruby
+# Character
+{"name":"Character's name"}
+
+# Line
+{"char_name":"Character's name", "phrase":"Character's phrase"}
+
+# Response
+{"response":"Main character's phrase", "next_node":"Name of the next node"}
+
+# Node
+{"name":"Node's name", "lines":[list_of_lines], "responses":[list_of_responses]}
+
+# Dialog
+{"starting_node":starting_node, "nodes":[list_of_nodes], "characters":[list_of_characters], "final_nodes_names":[list_of_final_nodes_names]}
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
