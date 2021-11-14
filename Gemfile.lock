@@ -17,6 +17,7 @@ GEM
     simplecov-html (0.10.2)
 
 PLATFORMS
+  ruby
   x64-mingw32
   x86_64-linux
 
