@@ -50,6 +50,10 @@ module RuberDialog
           }
         end
 
+        def ==(other)
+          @char_name == other.char_name and @phrase == other.phrase
+        end
+
         private :as_json
 
         def to_json(*options)
