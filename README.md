@@ -110,13 +110,9 @@ Usage:
         Description: There are items: ale, beer and 
         line breaks
         Gandalf: Frodo, take the ring!"
-   parser = RuberDialog::Parser::DescriptionLineParser.new(forbidden_expressions: %w([ ] ), reserved_names: [])
-   line = parser.parse(s) # => Line("Gandalf",
-   "{Greeting}
-     Description: There are items: ale, beer and 
-     line breaks
-     Gandalf: Frodo, take the ring!")
-   errors = parser.validate(s) # => list of errors, [] in the example
+    parser = RuberDialog::Parser::DescriptionLineParser.new(forbidden_expressions: %w([ ] ), reserved_names: [])
+    line = parser.parse(s) # => Line("Gandalf", "{Greeting}...")
+    errors = parser.validate(s) # => list of errors, [] in the example
    
 Methods:
 
@@ -134,15 +130,15 @@ Methods:
 
 Usage:
 
-s= "{Greeting}
-Description: There are items: ale, beer and
-line breaks
-Gandalf: Frodo, take the ring!
-
-{Test}
-Description: no description
-Me: Get out!"
-
+    s= "{Greeting}
+        Description: There are items: ale, beer and 
+        line breaks
+        Gandalf: Frodo, take the ring!
+        
+        {Test}
+        Description: no description
+        Me: Get out!"
+        "
     parser = DescriptionBlockParser.new()
     parser.parse(s) # => [Line("Gandalf","{Greeting}..."),Line("Me" , "{Test}...")]
 
