@@ -30,6 +30,7 @@ module RuberDialog
 
       # for validation and parsing
       def split_to_token_contents(descriptions_content)
+        block_name = descriptions_content.match(@block_start_regexp).to_s
         contents = descriptions_content.split @separator
         contents = contents.reject { |c| c.empty? }
         token_contents = []
@@ -44,7 +45,8 @@ module RuberDialog
           new_desc += content + "\n"
         end
         token_contents << TokenContent.new(new_desc, new_desc.count('\n'))
-      end
+        token_contents
+        end
 
       # validates descriptions block, returns hash<line number, ValidationError>
       def validate(descriptions_string)

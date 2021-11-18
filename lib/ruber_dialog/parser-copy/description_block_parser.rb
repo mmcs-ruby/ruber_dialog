@@ -44,7 +44,7 @@ module RuberDialog
           new_desc += content + "\n"
         end
         token_contents << TokenContent.new(new_desc, new_desc.count('\n'))
-      end
+        end
 
       # validates descriptions block, returns hash<line number, ValidationError>
       def validate(descriptions_string)

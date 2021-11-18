@@ -175,5 +175,5 @@ class DescriptionLineParserTest < Minitest::Test
   end
   assert_equal :exception_handled, result
   assert_equal ex.message.match?("Only one pair of '{}' is allowed for"), true
-end
+  end
 end
