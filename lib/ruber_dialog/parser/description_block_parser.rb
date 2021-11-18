@@ -34,11 +34,9 @@ module RuberDialog
         token_contents = []
         new_desc = ""
         contents.each do |content|
-          if content.match?(@block_start_regexp)
-            unless new_desc.empty?
+          if content.match?(@block_start_regexp) and !new_desc.empty?
               token_contents << TokenContent.new(new_desc, new_desc.count('\n'))
               new_desc = ""
-            end
           end
           new_desc += content + "\n"
         end
