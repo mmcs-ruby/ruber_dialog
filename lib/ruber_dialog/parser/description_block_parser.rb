@@ -30,8 +30,7 @@ module RuberDialog
 
       # for validation and parsing
       def split_to_token_contents(descriptions_content)
-        contents = descriptions_content.split @separator
-        contents = contents.reject { |c| c.empty? }
+        contents = descriptions_content.split(@separator).reject { |c| c.empty? }
         token_contents = []
         new_desc = ""
         contents.each do |content|
@@ -64,7 +63,7 @@ module RuberDialog
         end
 
         desc_lines = split_to_token_contents descriptions_string
-        desc_lines&.map { |desc_content| @token_parser.parse(desc_content.content) }
+        desc_lines.map { |desc_content| @token_parser.parse(desc_content.content) }
       end
     end
   end
