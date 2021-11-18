@@ -236,7 +236,14 @@ There is a list of classes having **.to_json** method that converts the object t
 # Dialog
 {"starting_node":starting_node, "nodes":[list_of_nodes], "characters":[list_of_characters], "final_nodes_names":[list_of_final_nodes_names]}
 ```
+##Export to unity
+GameObject Manager contains fields for the character name, frase, choice buttons, start JSON file, and the rest of JSON files. 
 
+Classes Dnode, Line and Response contain fields from JSON files and functions. 
+
+Script DialogueManager contains function LoadNode for showing text on the screen, function FindNextNode, and functions FirstChoice and Second choce for choise buttons.
+
+At the Start method all the nodes' names are put in the dictionary, to be accessed by FindNextNode method. 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
