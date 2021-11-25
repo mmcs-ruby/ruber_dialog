@@ -5,5 +5,7 @@
 /doc/
 /pkg/
 /spec/reports/
+/ruber_dialog/lib/ruber_dialog/parser-copy/
 /tmp/
 .idea
+/ruber_dialog/test/coverage

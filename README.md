@@ -99,6 +99,68 @@ Methods:
     def split_to_token_contents(character_content) - takes string, splits it to TokenContents
 
     def starting_line=(starting_line) - for setting up the line where block starts, used for error messages
+	
+#### Description parsing
+
+**Parser::DescriptionLineParser** (`lib/ruber_dialog/parser/description_parser.rb`) is a class for parsing single description.
+
+Usage:
+
+    s= "{Greeting}
+        Description: There are items: ale, beer and 
+        line breaks
+        Gandalf: Frodo, take the ring!"
+    parser = RuberDialog::Parser::DescriptionLineParser.new(forbidden_expressions: %w([ ] ), reserved_names: [])
+    line = parser.parse(s) # => Line("Gandalf", "{Greeting}...")
+    errors = parser.validate(s) # => list of errors, [] in the example
+   
+Methods:
+
+    def initiate(forbidden_expressions: [], reserved_names: []) 
+		forbidden_expressions - [String/RegExpr], expressions that are not supposed to be inside description
+        reserved_names - [String], reserved names such as "Description"
+ 
+    def parse(content) - takes a string and returns Parser::Line
+
+    def validate(content) - takes a string and returns [ValidationError]
+
+#### Description block parsing
+
+**Parser::DescriptionBlockParser** (`lib/ruber_dialog/parser/description_block_parser.rb`) is main class for parsing descriptions. 
+
+Usage:
+
+    s= "{Greeting}
+        Description: There are items: ale, beer and 
+        line breaks
+        Gandalf: Frodo, take the ring!
+        
+        {Test}
+        Description: no description
+        Me: Get out!"
+        "
+    parser = DescriptionBlockParser.new()
+    parser.parse(s) # => [Line("Gandalf","{Greeting}..."),Line("Me" , "{Test}...")]
+
+Methods:
+    
+    def initiate(starting_line: 1, block_start_regexp: /^{[a-zA-Z]+}$/, reserved_names: ["Description"],
+                     forbidden_expressions: %w({ [ ] }), separator: "\n") 
+        
+        block_start_regexp - [RegExpr], that matches start of a description block
+		starting_line - Integer, line number where the blocks starts.
+        reserved_names - [String], reserved names such as "Description"
+        forbidden_expressions - [String/RegExpr], expressions that are not supposed to be inside description block
+        separator - String/RegExpr, used to separate lines
+    
+    def parse(content) - takes a string and returns array of Parser::Line
+
+    def validate(content) - takes a string and returns Hash with Integer keys and [ValidationError] values
+
+    def split_to_token_contents(character_content) - takes string, splits it to TokenContents
+
+    def starting_line=(starting_line) - for setting up the line where block starts, used for error messages
+
 
 #### Abstractions
 It is recommended to use **Parser::TokenParser** (`lib/ruber_dialog/parser/parser.rb`) for parsing simple objects in strings, such as a character in **Character Block** or a response in **Response Block**.
